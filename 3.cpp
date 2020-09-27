@@ -5,27 +5,80 @@
 #include <map>
 #include <unordered_map>
 
-/** Problem statement: https://acm.bsu.by/courses/120/problems/2693/ */
+/** Problem statement: https://acm.bsu.by/courses/120/problems/2693/
+ В окружающем мире вы часто встречаете много телефонных номеров, и они становятся всё длиннее.
+ Вам надо запомнить некоторые из телефонных номеров. Один из методов, как это легче сделать,— это сопоставить буквам цифры, как это показано в следующей таблице:
+
+ 1 | I J
+ 2 | A B C
+ 3 | D E F
+ 4 | G H
+ 5 | K L
+ 6 | M N
+ 7 | P R S
+ 8 | T U V
+ 9 | W X Y
+ 0 | O Q Z
+
+ Таким образом, каждые слово или группа слов могут быть сопоставлены одному номеру, и вы можете запоминать слова вместо номеров.
+ Особенно приятно, если есть возможность найти какую-то простую связь между словом и самим человеком.
+ Вы легко можете запомнить номер вашего друга по шахматной игре:
+
+ 9 4 1 8 3 7 2 9 6
+ W H I T E P A W N
+
+ И номер вашего любимого учителя:
+
+ 2 8 5 5 3 0 4
+ B U L L D O G
+
+ Необходимо написать программу нахождения самой короткой последовательности слов из заданного словаря (т.е. последовательности, содержащей минимально возможное число слов),
+ которая соответствует данному номеру. Соответствие цифр и букв приведено выше в таблице.
+
+ Input:
+ Первая строка содержит телефонный номер, транскрипцию которого вам нужно найти. Номер содержит не более 100000 цифр.
+ Цифры номера не разделяются пробелами. Вторая строка содержит общее число слов в словаре (максимум 50000).
+ Каждая из последующих строк содержит одно слово, которое состоит не более чем из 100 символов — больших букв английского алфавита и цифр.
+
+ Output:
+ В первой строке выведите число слов в самой короткой последовательности, а во второй — найденную самую короткую последовательность слов.
+ Слова отделяются одним пробелом. Если нет решения, в первой строке выведите No solution.
+ Если есть более одного решения, имеющего минимум слов, вы можете выбрать любое из них.
+
+ Example:
+
+ input.txt
+ 42
+ 4
+ A
+ E
+ G
+ BE
+
+ output.txt
+ 2
+ G A
+
+ */
 
 using namespace std;
 
 const char alphabet[36] =
-    {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
-     'M',
-     'N', 'O', 'P', 'Q', 'R',
-     'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+        {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
+         'M',
+         'N', 'O', 'P', 'Q', 'R',
+         'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
 
 //const char alphabet[36] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
 //                           'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
 //                           's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
 const char numbers[36] =
-    {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '2', '2', '2', '3', '3', '3', '4', '4', '1', '1', '5', '5',
-     '6',
-     '6', '0', '7', '0', '7',
-     '7', '8', '8', '8', '9', '9', '9', '0'};
+        {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '2', '2', '2', '3', '3', '3', '4', '4', '1', '1', '5', '5',
+         '6',
+         '6', '0', '7', '0', '7',
+         '7', '8', '8', '8', '9', '9', '9', '0'};
 
-string translate(const string &givenWord)
-{
+string translate(const string &givenWord) {
     string outputNumber(givenWord.length(), '0');
     for (int i = 0; i < givenWord.length(); ++i) {
         outputNumber[i] = numbers[givenWord[i] - '0' < 10 ? givenWord[i] - '0' : givenWord[i] - 'A' + 10];
@@ -41,8 +94,7 @@ string translate(const string &givenWord)
 //    return ans;
 //}
 
-long long get_hash(const string &str, const vector<long long> &pows)
-{
+long long get_hash(const string &str, const vector<long long> &pows) {
     long long ans = 0;
     for (int i = str.size() - 1; i >= 0; --i) {
         ans += (str[i] - '0' + 1) * pows[str.size() - 1 - i];
@@ -50,15 +102,14 @@ long long get_hash(const string &str, const vector<long long> &pows)
     return ans;
 }
 
-int main()
-{
+int main() {
 
     ifstream fin("input.txt");
     string number;
     int wordsAmount;
     fin >> number;
     fin >> wordsAmount;
-    vector<string> words(wordsAmount);
+    vector <string> words(wordsAmount);
 
     long long p_pow = 1;
     vector<long long> pows(100);
@@ -94,8 +145,7 @@ int main()
                         if (j == 0) {
                             alreadyAmount[i - 1] = 1;
                             optimalWord[i - 1] = index;
-                        }
-                        else {
+                        } else {
                             alreadyAmount[i - 1] = alreadyAmount[j - 1] + 1;
                             optimalWord[i - 1] = index;
                         }
@@ -108,8 +158,7 @@ int main()
     vector<int> indices(number.size());
     if (alreadyAmount.back() == 1e9) {
         fout << "No solution" << endl;
-    }
-    else {
+    } else {
         int newAmount = alreadyAmount.back();
         int i = number.size() - 1;
         while (newAmount != 0) {

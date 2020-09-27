@@ -3,7 +3,35 @@
 #include <fstream>
 #include <algorithm>
 
-/** Problem Statement: https://acm.bsu.by/courses/120/problems/2110/ */
+/** Problem Statement: https://acm.bsu.by/courses/120/problems/2110/
+ Компания Broken Tiles известна в мире как наилучшая компания по производству различных маленьких плиток.
+ Может показаться странным такое занятие компании, но в последнее время у очень богатых людей появилось увлечении в собирании плиток различной формы и размеров.
+ Вот и сейчас, очень известный бизнесмен заказал новую партию плиток (чёрного и белого цветов).
+ Из них он хочет сложить прямоугольную фигуру, но такую, чтобы в ней не было квадрата 2×2, состоящего из плиток одного цвета — такая фигура называется симпатичной.
+ Так как собирание фигур стало очень популярным, то директор компании решил узнать, сколько различных симпатичных фигур размера n×m плиток,
+ можно сложить, используя только чёрные и белые плиток. И эту задачу он поручил Вам.
+
+ Input:
+ Единственная строка содержит два числа n и m (1≤n≤10^100, 1≤m≤5).
+
+ Output:
+ Выведите число различных симпатичных фигур размером n×m, взятое по модулю 10000.
+
+ Example:
+ input.txt
+ 2 2
+
+ output.txt
+ 14
+
+ input.txt
+ 3 3
+
+ output.txt
+ 322
+
+
+ */
 
 using namespace std;
 
@@ -25,8 +53,8 @@ bool isGood(vector<int> &v1, vector<int> &v2) {
     return true;
 }
 
-void multiply(vector<vector<int>> &a, const vector<vector<int>> &b,
-              vector<vector<int>> &tmp) {
+void multiply(vector <vector<int>> &a, const vector <vector<int>> &b,
+              vector <vector<int>> &tmp) {
     size_t size = a.size();
     for (int i = 0; i < size; ++i) {
         for (int j = 0; j < size; ++j) {
@@ -43,15 +71,15 @@ void multiply(vector<vector<int>> &a, const vector<vector<int>> &b,
     }
 }
 
-vector<vector<int>> multiply_copy(const vector<vector<int>> &v1, const vector<vector<int>> &v2) {
+vector <vector<int>> multiply_copy(const vector <vector<int>> &v1, const vector <vector<int>> &v2) {
     int size = v1.size();
-    vector<vector<int>> res(size, vector<int>(size));
+    vector <vector<int>> res(size, vector<int>(size));
     for (int i = 0; i < size; ++i) {
         for (int j = 0; j < size; ++j) {
             res[i][j] = 0;
             for (int k = 0; k < size; ++k) {
-                res[i][j] += (v1[i][k] * v2[k][j])%10000;
-                res[i][j] = res[i][j]%10000;
+                res[i][j] += (v1[i][k] * v2[k][j]) % 10000;
+                res[i][j] = res[i][j] % 10000;
             }
         }
     }
@@ -59,13 +87,13 @@ vector<vector<int>> multiply_copy(const vector<vector<int>> &v1, const vector<ve
 }
 
 
-void power(vector<vector<int>> &a, int n) {
+void power(vector <vector<int>> &a, int n) {
     for (int i = 0; i < n - 1; ++i) {
         a = multiply_copy(a, a);
     }
 }
 
-unsigned long long int getAmount(const vector<vector<int>> &v) {
+unsigned long long int getAmount(const vector <vector<int>> &v) {
     unsigned long long int amount = 0;
     for (int i = 0; i < v.size(); ++i) {
         for (int j = 0; j < v.size(); ++j) {
@@ -75,7 +103,7 @@ unsigned long long int getAmount(const vector<vector<int>> &v) {
     return amount;
 }
 
-void divide(vector<vector<int>> &v) {
+void divide(vector <vector<int>> &v) {
     for (int i = 0; i < v.size(); ++i) {
         for (int j = 0; j < v.size(); ++j) {
             v[i][j] = v[i][j] % 10000;
@@ -106,56 +134,56 @@ void divide(vector<vector<int>> &v) {
 //    return D;
 //}
 
-vector<int> myminus(const vector<int> &a, vector<int> b){
+vector<int> myminus(const vector<int> &a, vector<int> b) {
     vector<int> v = a;
     int carry = 0;
-    for (size_t i=0; i<b.size() || carry; ++i) {
+    for (size_t i = 0; i < b.size() || carry; ++i) {
         v[i] -= carry + (i < b.size() ? b[i] : 0);
         carry = v[i] < 0;
-        if (carry)  v[i] += base;
+        if (carry) v[i] += base;
     }
     while (v.size() > 1 && v.back() == 0)
         v.pop_back();
     return v;
 }
 
-vector<int> mydivide(const vector<int> &a, int del){
+vector<int> mydivide(const vector<int> &a, int del) {
     vector<int> ans = a;
     int carry = 0;
-    for (int i=(int)ans.size()-1; i>=0; --i) {
+    for (int i = (int) ans.size() - 1; i >= 0; --i) {
         long long cur = ans[i] + carry * 1ll * base;
-        ans[i] = int (cur / del);
-        carry = int (cur % del);
+        ans[i] = int(cur / del);
+        carry = int(cur % del);
     }
     while (ans.size() > 1 && ans.back() == 0)
         ans.pop_back();
     return ans;
 }
 
-void print(const vector<int> &v){
-    for (int i = v.size() - 1;i>=0;--i){
-        cout<<v[i];
+void print(const vector<int> &v) {
+    for (int i = v.size() - 1; i >= 0; --i) {
+        cout << v[i];
     }
-    cout<<endl;
+    cout << endl;
 }
 
-vector<vector<int>> power_mod(const vector<vector<int>> &a, vector<int> n){
+vector <vector<int>> power_mod(const vector <vector<int>> &a, vector<int> n) {
     print(n);
     if (n.size() == 1 && n[0] == 0) {
-        vector<vector<int>> v(a.size(), vector<int>(a.size()));
+        vector <vector<int>> v(a.size(), vector<int>(a.size()));
         for (int i = 0; i < v.size(); ++i) {
             v[i][i] = 1;
         }
         return v;
     };
     if (n[0] % 2 == 1) {
-        vector<vector<int>> new_a = a;
+        vector <vector<int>> new_a = a;
         new_a = multiply_copy(new_a, power_mod(new_a, myminus(n, {1})));
         divide(new_a);
         return new_a;
     }
-    vector<vector<int>> D = power_mod(a, mydivide(n, 2));
-    vector<vector<int>> tmp = D, tmp2(a.size(), vector<int>(a.size()));
+    vector <vector<int>> D = power_mod(a, mydivide(n, 2));
+    vector <vector<int>> tmp = D, tmp2(a.size(), vector<int>(a.size()));
     //multiply(D, tmp, tmp2);
     D = multiply_copy(D, D);
     divide(D);
@@ -178,7 +206,7 @@ int main() {
             a.push_back(atoi(m_str.substr(i - 9, 9).c_str()));
 
     vector<int> v_i(n), v_j(n);
-    vector<vector<int>> A(1 << n, vector<int>(1 << n));
+    vector <vector<int>> A(1 << n, vector<int>(1 << n));
     for (int i = 0; i < 1 << n; ++i) {
         to_binary(v_i, n, i);
         for (int j = 0; j < 1 << n; ++j) {

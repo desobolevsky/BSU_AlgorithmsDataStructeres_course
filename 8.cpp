@@ -4,7 +4,7 @@
 #include <vector>
 #include <set>
 
-/** Problem Statement: https://acm.bsu.by/solutions/381498/source/ */
+/** Problem Statement: https://acm.bsu.by/solutions/381498/source/ = 403 Forbidden :( */
 
 int m, n;
 
